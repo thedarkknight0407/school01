@@ -1,0 +1,115 @@
+import random as r
+
+#Introduction and starting
+
+print("=============================================================================================================================")
+print("Welcome To The Number Guesser 2.0!")
+print("The rules are as follows:")
+print("The system will select a random n digit number for you (0 not included in the digits & and each digit only used once)")
+print("Where n depends on difficulty: Easy - 4 digits, Medium - 5 digits, Hard - 4 digits, Extreme - 5 digits")
+print("The differen between hard, extreme and easy, medium is that the hints wont reveal the condition of the digits")
+print("The hint will be randomised")
+print("You will have 10 guesses to guess the answer correctly")
+print("The system will help you with clues with each of your guesses (mentioned below)")
+print("🔴 represents the digit isnt present in the answer")
+print("🟡 represents that the digit is present but the position is not correct")
+print("🟢 represents that both the digit and the position is correct")
+print("==============================================================================================================================")
+print()
+
+
+
+def begin():
+
+    #VARIABLES
+    answer = ''
+    flag = False
+    guess = 0
+
+    #Difficulty
+    difficulty = input("Enter difficulty (Easy - E, Medium - M, Hard - H, Extreme - X): \n")
+    digit_dict = {'e': 4, 'm': 5, 'h': 4, 'x': 5}
+
+    digits = digit_dict[difficulty.lower()]
+    #Getting the random number
+    a = ''
+    answer = ''
+    while len(answer) < digits:
+        a = str(r.randint(1,9))
+        if a in answer:
+            pass
+        else:
+            answer += a
+
+    #Getting and validating the input from user
+    print()
+    print("So let's begin!!🏳️")
+    print()
+    #validating the guess
+    def validate(param):
+        hint_list = list()
+        guess_values = list(str(param))
+        answer_values = list(answer)
+
+        for i in range(len(guess_values)):
+            if guess_values[i] in answer:
+
+                #comparing positions
+                if answer_values.index(guess_values[i]) == guess_values.index(guess_values[i]):
+                    hint_list.append("🟢")
+
+                else:
+                    hint_list.append("🟡")
+            else:
+                hint_list.append('🔴')
+
+        if difficulty.lower() == 'h' or difficulty.lower() ==  'x':
+            r.shuffle(hint_list)
+
+        for i in range(digits):
+            print(hint_list[i], end = ' ')
+
+        
+    tries = 10
+
+    for i in range(10):
+        try:
+            guess = int(input(f"Enter your guess (Tries left:{tries}): "))
+            if len(str(guess)) != digits:
+                print(f"The guess should be of exactly {digits} numbers!")
+                tries += 1
+        
+            validate(guess)
+            print()
+
+            if str(guess) == answer: 
+                flag = True
+        except:
+            print(f"The guess should be a {digits}-digit number!")
+            tries += 1
+
+        
+
+        tries -= 1
+
+        if flag == True:
+            print("=====================================================")
+            print("YOU WON!!!🥳🥳")
+            print(f"The answer was: {answer}")
+            print("=====================================================")
+            break
+    if flag == False:
+        print("=====================================================")
+        print("YOU LOST!😔")
+        print(f"The answer was: {answer}")
+        print("=====================================================")
+
+start = input("Enter Y to begin or N to exit: ")
+
+if start == "Y":
+    begin()
+
+elif start == "N":
+    pass
+else:
+    print("Input not recognised!")
